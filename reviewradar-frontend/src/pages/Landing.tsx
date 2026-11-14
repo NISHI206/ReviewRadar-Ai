@@ -46,12 +46,12 @@ export default function Landing() {
         <div className="nav-links">
           <a href="#features">Features</a>
           <a href="#how-it-works">How it works</a>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/login">Login</Link>
         </div>
 
-        <Link to="/analyze" className="nav-cta">
-          Get Started <ArrowRight size={16} />
-        </Link>
+        <Link to="/signup" className="nav-cta">
+        Get Started <ArrowRight size={16} />
+      </Link>
       </nav>
 
       <main>
@@ -75,13 +75,14 @@ export default function Landing() {
             </p>
 
             <div className="hero-actions">
-              <Link to="/analyze" className="primary-cta">
-                Analyze Reviews <ArrowRight size={18} />
-              </Link>
-              <Link to="/dashboard" className="secondary-cta">
-                Explore Dashboard <ChevronRight size={17} />
-              </Link>
-            </div>
+            <Link to="/signup" className="primary-cta">
+              Analyze Reviews <ArrowRight size={18} />
+            </Link>
+
+            <Link to="/login" className="secondary-cta">
+              Explore Dashboard <ChevronRight size={17} />
+            </Link>
+          </div>
 
             <div className="hero-trust">
               <span><ShieldCheck size={17} /> AI-powered insights</span>

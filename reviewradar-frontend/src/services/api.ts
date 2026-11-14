@@ -1,7 +1,8 @@
 
-
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+// -------------------- TYPES --------------------
 
 export interface AnalyzeReviewInput {
   review: string;
@@ -27,11 +28,33 @@ export interface ReviewAnalysis {
   recommendations: string[];
 }
 
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface SignupInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+// -------------------- API REQUEST --------------------
+
 async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    credentials: "include",
+  });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
@@ -40,8 +63,50 @@ async function apiRequest<T>(
     );
   }
 
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return response.json();
 }
+
+// -------------------- AUTHENTICATION --------------------
+
+// Signup
+export function signup(input: SignupInput) {
+  return apiRequest<{ message: string; user: AuthUser }>("/auth/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+}
+
+// Login
+export function login(input: LoginInput) {
+  return apiRequest<{ message: string; user: AuthUser }>("/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  });
+}
+
+// Get currently logged-in user
+export function getCurrentUser() {
+  return apiRequest<{ user: AuthUser }>("/auth/me");
+}
+
+// Logout
+export function logout() {
+  return apiRequest<{ message: string }>("/auth/logout", {
+    method: "POST",
+  });
+}
+
+// -------------------- REVIEW ANALYSIS --------------------
 
 // Analyze a single customer review
 export function analyzeReview(

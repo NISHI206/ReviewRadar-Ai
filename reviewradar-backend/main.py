@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database import check_database
 
-from routes import analyze, reviews, dashboard
+from routes import analyze, reviews, dashboard, auth
 
 app = FastAPI(
     title="ReviewRadar AI",
@@ -27,7 +27,7 @@ app.add_middleware(
 app.include_router(analyze.router, tags=["Analysis"])
 app.include_router(reviews.router, tags=["Reviews"])
 app.include_router(dashboard.router, tags=["Dashboard"])
-
+app.include_router(auth.router)
 
 @app.on_event("startup")
 def startup_event():
