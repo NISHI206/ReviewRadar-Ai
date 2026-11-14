@@ -4,6 +4,7 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Analyze from "./pages/Analyze";
 import Results from "./pages/Results";
+import ReviewHistory from "./pages/ReviewHistory";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/analyze" element={<Analyze />} />
         <Route path="/results" element={<Results />} />
+        <Route path="/history" element={<ReviewHistory />} />
       </Routes>
     </BrowserRouter>
   );
