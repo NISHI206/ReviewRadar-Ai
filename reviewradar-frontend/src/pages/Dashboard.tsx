@@ -218,17 +218,17 @@ export default function Dashboard() {
             {stats ? (
               <div style={{ marginTop: "22px" }}>
                 {[
-                  {
-                    label: "Positive",
-                    value: stats.positive_percentage,
-                    color: "#16a34a",
-                  },
-                  {
-                    label: "Negative",
-                    value: stats.negative_percentage,
-                    color: "#dc2626",
-                  },
-                ].map((item) => (
+                    {
+                      label: "Positive",
+                      value: stats.positive_percentage,
+                      color: "#16a34a",
+                    },
+                    {
+                      label: "Negative",
+                      value: stats.negative_percentage,
+                      color: "#dc2626",
+                    },
+                  ].map((item) => (
                   <div key={item.label} style={{ marginBottom: "20px" }}>
                     <div
                       style={{

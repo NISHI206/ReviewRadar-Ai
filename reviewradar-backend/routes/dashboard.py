@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, HTTPException
 from collections import defaultdict
 from database import reviews_collection
@@ -20,25 +21,42 @@ def dashboard_stats():
 
         total = len(reviews)
 
+        # Count Positive and Negative reviews
         positive = sum(
             1 for r in reviews
-            if r.get("sentiment", "").lower() == "positive"
+            if str(r.get("sentiment", "")).strip() == "1"
         )
 
         negative = sum(
             1 for r in reviews
-            if r.get("sentiment", "").lower() == "negative"
+            if str(r.get("sentiment", "")).strip() == "0"
         )
 
+        # Calculate percentages
+        positive_percentage = (
+            round((positive / total) * 100, 2) if total else 0
+        )
+
+        negative_percentage = (
+            round((negative / total) * 100, 2) if total else 0
+        )
+
+        # Aspect analysis
         aspect_counts = defaultdict(
-            lambda: {"positive": 0, "negative": 0, "neutral": 0}
+            lambda: {
+                "positive": 0,
+                "negative": 0,
+                "neutral": 0
+            }
         )
 
         for review in reviews:
             for aspect in review.get("aspects", []):
 
                 name = aspect.get("aspect", "Other")
-                sentiment = aspect.get("sentiment", "").lower()
+                sentiment = str(
+                    aspect.get("sentiment", "")
+                ).strip().lower()
 
                 if sentiment in ("positive", "negative", "neutral"):
                     aspect_counts[name][sentiment] += 1
@@ -62,12 +80,8 @@ def dashboard_stats():
             "total_reviews": total,
             "positive_count": positive,
             "negative_count": negative,
-            "positive_percentage": round(
-                positive / total * 100, 2
-            ) if total else 0,
-            "negative_percentage": round(
-                negative / total * 100, 2
-            ) if total else 0,
+            "positive_percentage": positive_percentage,
+            "negative_percentage": negative_percentage,
             "top_aspects": top_aspects[:10]
         }
 
@@ -84,7 +98,11 @@ def get_insights():
     try:
         reviews = list(reviews_collection.find(
             {},
-            {"key_issues": 1, "positive_points": 1, "_id": 0}
+            {
+                "key_issues": 1,
+                "positive_points": 1,
+                "_id": 0
+            }
         ))
 
         issue_counts = defaultdict(int)
@@ -106,6 +124,7 @@ def get_insights():
                 key=lambda x: x["count"],
                 reverse=True
             )[:5],
+
             "popular_positive_points": sorted(
                 [
                     {"point": key, "count": value}
