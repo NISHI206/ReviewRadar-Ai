@@ -1,10 +1,8 @@
 
 
-
-
-
+import { Home } from "lucide-react";
 import { useState, useRef, type ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   analyzeReview,
   analyzeCsv,
@@ -137,8 +135,14 @@ export default function Analyze() {
 
   return (
     <main className="analyze-page">
-      <div className="analyze-container">
-        <div className="analyze-heading">
+  <div className="analyze-container">
+
+    <Link to="/" className="home-button">
+      <Home size={17} />
+      Home
+    </Link>
+
+    <div className="analyze-heading">
           <span className="analyze-tag">
             AI-POWERED REVIEW INTELLIGENCE
           </span>

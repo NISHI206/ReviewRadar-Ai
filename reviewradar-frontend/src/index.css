@@ -937,3 +937,25 @@ textarea {
     gap: 12px;
   }
 }
+
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 17px;
+  border: 1px solid #e2dafa;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #7047eb;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-bottom: 25px;
+}
+
+.home-button:hover {
+  background: #f3efff;
+  border-color: #7047eb;
+  transform: translateY(-2px);
+}

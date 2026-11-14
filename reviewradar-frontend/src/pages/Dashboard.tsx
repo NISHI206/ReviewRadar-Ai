@@ -1,6 +1,6 @@
 
 
-
+import { Home } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -90,6 +90,10 @@ export default function Dashboard() {
       }}
     >
       <div style={{ maxWidth: "1150px", margin: "auto" }}>
+        <Link to="/" className="home-button">
+        <Home size={17} />
+        Home
+      </Link>
         <div
           style={{
             display: "flex",
