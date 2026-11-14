@@ -1,6 +1,6 @@
 
 
-import { Home } from "lucide-react";
+import { Home, LayoutDashboard } from "lucide-react";
 import { useState, useRef, type ChangeEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -141,6 +141,10 @@ export default function Analyze() {
       <Home size={17} />
       Home
     </Link>
+    <Link to="/dashboard" className="home-button">
+  <LayoutDashboard size={17} />
+  Dashboard
+</Link>
 
     <div className="analyze-heading">
           <span className="analyze-tag">

@@ -1,6 +1,7 @@
 
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { LayoutDashboard } from "lucide-react";
 import type { ReviewAnalysis } from "../services/api";
 
 export default function Results() {
@@ -53,19 +54,39 @@ export default function Results() {
       }}
     >
       <div style={{ maxWidth: "900px", margin: "auto" }}>
-        <button
-          onClick={() => navigate("/analyze")}
-          style={{
-            border: "none",
-            background: "transparent",
-            color: "#6d28d9",
-            cursor: "pointer",
-            marginBottom: "20px",
-            fontSize: "15px",
-          }}
-        >
-          ← Analyze another review
-        </button>
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: "20px",
+      flexWrap: "wrap",
+      gap: "12px",
+    }}
+  >
+    <button
+      onClick={() => navigate("/analyze")}
+      style={{
+        border: "none",
+        background: "transparent",
+        color: "#6d28d9",
+        cursor: "pointer",
+        fontSize: "15px",
+      }}
+    >
+      ← Analyze another review
+    </button>
+
+    <Link
+      to="/dashboard"
+      className="home-button"
+      style={{ marginBottom: 0 }}
+    >
+      <LayoutDashboard size={17} />
+      Dashboard
+    </Link>
+  </div>
 
         <h1 style={{ fontSize: "30px", color: "#1e293b" }}>
           Review Analysis Results
