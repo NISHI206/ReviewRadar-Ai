@@ -1,3 +1,4 @@
+
 from datetime import datetime, timezone
 
 from ml_service import predict_sentiment
@@ -5,7 +6,11 @@ from genai_service import generate_review_insights
 from database import reviews_collection
 
 
-def analyze_review(review: str, business_name: str | None = None):
+def analyze_review(
+    review: str,
+    user_id: str,
+    business_name: str | None = None
+):
 
     # Step 1: ML prediction
     ml_result = predict_sentiment(review)
@@ -29,9 +34,10 @@ def analyze_review(review: str, business_name: str | None = None):
         "recommendations": ai_result["recommendations"]
     }
 
-    # Step 4: Save in MongoDB
+    # Step 4: Save with authenticated user's ID
     document = {
         **final_result,
+        "user_id": user_id,
         "created_at": datetime.now(timezone.utc)
     }
 

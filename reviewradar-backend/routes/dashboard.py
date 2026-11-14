@@ -1,17 +1,20 @@
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from collections import defaultdict
+
 from database import reviews_collection
+from dependencies.auth import get_current_user
 
 router = APIRouter()
 
 
 @router.get("/dashboard/stats")
-def dashboard_stats():
+def dashboard_stats(user: dict = Depends(get_current_user)):
 
     try:
+        # Fetch only reviews belonging to the logged-in user
         reviews = list(reviews_collection.find(
-            {},
+            {"user_id": user["id"]},
             {
                 "sentiment": 1,
                 "aspects": 1,
@@ -21,18 +24,19 @@ def dashboard_stats():
 
         total = len(reviews)
 
-        # Count Positive and Negative reviews
+        # Support both old numeric labels and new text labels
         positive = sum(
             1 for r in reviews
-            if str(r.get("sentiment", "")).strip() == "1"
+            if str(r.get("sentiment", "")).strip().lower()
+            in ("1", "positive")
         )
 
         negative = sum(
             1 for r in reviews
-            if str(r.get("sentiment", "")).strip() == "0"
+            if str(r.get("sentiment", "")).strip().lower()
+            in ("0", "negative")
         )
 
-        # Calculate percentages
         positive_percentage = (
             round((positive / total) * 100, 2) if total else 0
         )
@@ -93,11 +97,12 @@ def dashboard_stats():
 
 
 @router.get("/insights")
-def get_insights():
+def get_insights(user: dict = Depends(get_current_user)):
 
     try:
+        # Fetch only this user's reviews
         reviews = list(reviews_collection.find(
-            {},
+            {"user_id": user["id"]},
             {
                 "key_issues": 1,
                 "positive_points": 1,

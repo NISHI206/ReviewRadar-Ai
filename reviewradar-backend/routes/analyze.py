@@ -1,4 +1,7 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
+from dependencies.auth import get_current_user
+
 import pandas as pd
 from io import BytesIO
 
@@ -9,12 +12,15 @@ router = APIRouter()
 
 
 @router.post("/analyze")
-def analyze_single_review(data: AnalyzeRequest):
-
+def analyze_single_review(
+    data: AnalyzeRequest,
+    user: dict = Depends(get_current_user)
+):
     try:
         result = analyze_review(
             data.review,
-            data.business_name
+            user_id=user["id"],
+            business_name=data.business_name
         )
 
         return result
@@ -27,9 +33,11 @@ def analyze_single_review(data: AnalyzeRequest):
 
 
 @router.post("/analyze-csv")
-async def analyze_csv(file: UploadFile = File(...)):
-
-    if not file.filename.lower().endswith(".csv"):
+async def analyze_csv(
+    file: UploadFile = File(...),
+    user: dict = Depends(get_current_user)
+):
+    if not file.filename or not file.filename.lower().endswith(".csv"):
         raise HTTPException(
             status_code=400,
             detail="Please upload a CSV file."
@@ -60,7 +68,11 @@ async def analyze_csv(file: UploadFile = File(...)):
             if len(review) < 5:
                 continue
 
-            result = analyze_review(review)
+            result = analyze_review(
+                review,
+                user_id=user["id"]
+            )
+
             results.append(result)
 
         return {
